@@ -14,14 +14,21 @@ use Illuminate\Support\Facades\Mail;
 {
     // Store Contact Form data
     public function ContactForm(Request $request) {
+        $messages = [
+            'phone.regex' => 'Phone number must start with + and be exactly 13 characters long.'
+        ];
  
         // Form validation
-         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'subject'=>'required',
-            'message' => 'required'
-         ]);
+        $validator = Validator::make($request->all(), [
+            'fname' => 'required|string|min:2|max:50',
+            'country_code' => 'required|not_in:null',
+            'phone' => 'required|numeric|',
+            'select_service' => 'required|string|not_in:null',
+            'select_product' => 'required|string|not_in:null',
+            'email' => 'required|email:rfc,dns|max:100',
+            'message' => 'required|string|min:10|max:255'
+        ] , $messages);
+        
          if ($validator->fails()) { 
      return response()->json(['error'=>$validator->errors()], 401);            
  }
